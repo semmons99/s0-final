@@ -1,10 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-require 'board'
+require 'go/board'
 
 describe "Board" do
   before :each do
-    @board = Board.new
+    @board = Go::Board.new
   end
 
   describe "#new" do
@@ -32,7 +32,7 @@ describe "Board" do
 
     describe "with `size` given" do
       before :each do
-        @board = Board.new(13)
+        @board = Go::Board.new(13)
       end
 
       it "should store the given board size" do
