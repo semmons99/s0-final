@@ -24,6 +24,21 @@ module Go
       next_turn
       self
     end
+    
+    def pretty_board
+      @board.layout.map{|row|
+        row.map{|cell|
+          case cell
+          when :white
+            'w'
+          when :black
+            'b'
+          when :empty
+            '.'
+          end
+        }.join(" ")
+      }.join("\n")
+    end
 
     private
 
