@@ -16,6 +16,13 @@ describe "Game" do
       Go::Board.should_receive(:new).once
       @game = Go::Game.new
     end
+
+    describe "with `board_size` given" do
+      it "should create a new board of the specified size" do
+        @game = Go::Game.new(13)
+        @game.board.length.should == 13
+      end
+    end
   end
 
   describe "#board" do
