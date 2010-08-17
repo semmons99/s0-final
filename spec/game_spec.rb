@@ -23,4 +23,20 @@ describe "Game" do
       @game.board.each{|row| row.each{|cell| cell.should == :empty}}
     end
   end
+
+  describe "#pass" do
+    it "should call Board#pass" do
+      # Revealing @board to a user could lead to potentially circumventing game
+      # logic. Therefore to test #pass we have to use  #instance_variable_get.
+      @game.instance_variable_get(:@board).should_receive(:sync_previous_layout).once
+      @game.pass
+    end
+
+    it "should change the current player turn to the opposite color" do
+      @game.pass
+      @game.turn.should == :black
+      @game.pass
+      @game.turn.should == :white
+    end
+  end
 end

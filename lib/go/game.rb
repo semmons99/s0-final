@@ -12,5 +12,11 @@ module Go
     def board
       @board.layout
     end
+
+    def pass
+      @board.sync_previous_layout
+      @turn = @turn == :white ? :black : :white
+      self
+    end
   end
 end
