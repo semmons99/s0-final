@@ -13,6 +13,7 @@ module Go
       [@layout, @previous_layout].each do |board|
         (0...@size).each{|row| (0...@size).each{|col| board[row][col] = :empty}}
       end
+      self
     end
   end
 end
