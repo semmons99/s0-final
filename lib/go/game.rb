@@ -18,5 +18,11 @@ module Go
       @turn = @turn == :white ? :black : :white
       self
     end
+
+    def place_stone(row, col)
+      @board.place_stone(row, col, @turn)
+      @turn = @turn == :white ? :black : :white
+      self
+    end
   end
 end

@@ -39,4 +39,20 @@ describe "Game" do
       @game.turn.should == :white
     end
   end
+
+  describe "#place_stone" do
+    it "should place the current players stone in the request position" do
+      @game.place_stone(0, 0)
+      @game.board[0][0].should == :white
+      @game.place_stone(0, 1)
+      @game.board[0][1].should == :black
+    end
+
+    it "should change the current player turn to the opposite color" do
+      @game.place_stone(0, 0)
+      @game.turn.should == :black
+      @game.place_stone(0, 1)
+      @game.turn.should == :white
+    end
+  end
 end
