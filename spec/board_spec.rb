@@ -97,4 +97,22 @@ describe "Board" do
       @board.layout[0][0].should == :white
     end
   end  
+
+  describe "#remove_stone" do
+    it "should raise `EmptySpace` when attempting to remove a stone that doesn't exist" do
+      lambda{@board.remove_stone(0, 0)}.should raise_error Go::EmptySpace
+    end
+
+    it "should copy the current layout into the previous layout" do
+      @board.place_stone(0, 0, :white)
+      @board.remove_stone(0, 0,)
+      @board.previous_layout[0][0].should == :white
+    end
+
+    it "should remove requested stone" do
+      @board.place_stone(0, 0, :white)
+      @board.remove_stone(0, 0)
+      @board.layout[0][0].should == :empty
+    end
+  end
 end

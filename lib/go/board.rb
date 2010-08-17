@@ -1,6 +1,7 @@
 module Go
   class UnknownStoneColor < StandardError; end
   class NonEmptySpace < StandardError; end
+  class EmptySpace < StandardError; end
 
   class Board
     attr_reader :size, :layout, :previous_layout
@@ -25,6 +26,14 @@ module Go
 
       @previous_layout = Marshal.load(Marshal.dump(@layout))
       @layout[row][col] = color
+      self
+    end
+
+    def remove_stone(row, col)
+      raise EmptySpace if @layout[row][col] == :empty
+
+      @previous_layout = Marshal.load(Marshal.dump(@layout))
+      @layout[row][col] = :empty
       self
     end
   end
