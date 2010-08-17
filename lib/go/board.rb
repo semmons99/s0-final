@@ -1,4 +1,7 @@
 module Go
+  class UnknownStoneColor < StandardError; end
+  class NonEmptySpace < StandardError; end
+
   class Board
     attr_reader :size, :layout, :previous_layout
 
@@ -13,6 +16,15 @@ module Go
       [@layout, @previous_layout].each do |board|
         (0...@size).each{|row| (0...@size).each{|col| board[row][col] = :empty}}
       end
+      self
+    end
+
+    def place_stone(row, col, color)
+      raise UnknownStoneColor unless [:white, :black].include?(color)
+      raise NonEmptySpace unless @layout[row][col] == :empty
+
+      @previous_layout = Marshal.load(Marshal.dump(@layout))
+      @layout[row][col] = color
       self
     end
   end

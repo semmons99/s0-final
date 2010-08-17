@@ -53,17 +53,48 @@ describe "Board" do
 
   describe "#reset" do
     it "should initialize the board" do
-      # TODO replace #instance_variable_get once #place_stone is implemented
-      @board.instance_variable_get(:@layout)[0][0] = :white
+      @board.place_stone(0, 0, :white)
       @board.reset
       @board.layout.each{|row| row.each{|cell| cell.should == :empty}}
     end
 
     it "should initialize the previous board" do
-      # TODO replace #instance_variable_get once #place_stone is implemented
-      @board.instance_variable_get(:@previous_layout)[0][0] = :white
+      @board.place_stone(0, 0, :white)
       @board.reset
       @board.previous_layout.each{|row| row.each{|cell| cell.should == :empty}}
     end
   end
+
+  describe "#place_stone" do
+    it "should raise `UnknownStoneColor` when `color` isn't black/white" do
+      lambda{@board.place_stone(0, 0, :purple)}.should raise_error Go::UnknownStoneColor
+    end
+
+    it "should not raise `UnknownStoneColor` when `color is black/white" do
+      lambda{@boad.place_stone(0, 0, :white)}.should_not raise_error Go::UnknownStoneColor
+      lambda{@boad.place_stone(0, 0, :black)}.should_not raise_error Go::UnknownStoneColor
+    end
+
+    it "should raise `NonEmptySpace` when stone is placed on a non-empty cell" do
+      @board.place_stone(0, 0, :white)
+      lambda{@board.place_stone(0, 0, :white)}.should raise_error Go::NonEmptySpace
+    end
+
+    it "should not raise `NonEmptySpace` when stone is placed on a empty cell" do
+      lambda{@board.place_stone(0, 0, :white)}.should_not raise_error Go::NonEmptySpace
+    end
+
+    it "should copy the current layout into the previous layout" do
+      @board.place_stone(0, 0, :white)
+      @board.previous_layout[0][0].should == :empty
+      @board.place_stone(0, 1, :white)
+      @board.previous_layout[0][0].should == :white
+      @board.previous_layout[0][1].should == :empty
+    end
+
+    it "should place the stone on the board" do
+      @board.place_stone(0, 0, :white)
+      @board.layout[0][0].should == :white
+    end
+  end  
 end
