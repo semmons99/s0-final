@@ -84,6 +84,12 @@ describe "Board" do
       lambda{@board.place_stone(0, 0, :white)}.should_not raise_error Go::NonEmptySpace
     end
 
+    it "should raise `KoViolation` when Ko is violated" do
+      @board.place_stone(0, 0, :white)
+      @board.remove_stone(0, 0)
+      lambda{@board.place_stone(0, 0, :white)}.should raise_error Go::KoViolation
+    end
+
     it "should copy the current layout into the previous layout" do
       @board.place_stone(0, 0, :white)
       @board.previous_layout[0][0].should == :empty

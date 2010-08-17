@@ -2,6 +2,7 @@ module Go
   class UnknownStoneColor < StandardError; end
   class NonEmptySpace < StandardError; end
   class EmptySpace < StandardError; end
+  class KoViolation < StandardError; end
 
   class Board
     attr_reader :size, :layout, :previous_layout
@@ -23,6 +24,7 @@ module Go
     def place_stone(row, col, color)
       raise UnknownStoneColor unless [:white, :black].include?(color)
       raise NonEmptySpace unless @layout[row][col] == :empty
+      raise KoViolation if ko_violation?(row, col, color)
 
       sync_previous_layout
       @layout[row][col] = color
@@ -40,6 +42,14 @@ module Go
     def sync_previous_layout
       @previous_layout = Marshal.load(Marshal.dump(@layout))
       self
+    end
+
+    private
+
+    def ko_violation?(row, col, color)
+      proposed_layout = Marshal.load(Marshal.dump(@layout))
+      proposed_layout[row][col] = color
+      proposed_layout == @previous_layout
     end
   end
 end
