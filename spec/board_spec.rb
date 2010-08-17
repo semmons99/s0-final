@@ -115,4 +115,12 @@ describe "Board" do
       @board.layout[0][0].should == :empty
     end
   end
+
+  describe "#sync_previous_layout" do
+    it "should copy layout into previous layout" do
+      @board.place_stone(0, 0, :white)
+      @board.sync_previous_layout
+      @board.previous_layout.should == @board.layout
+    end
+  end
 end

@@ -24,7 +24,7 @@ module Go
       raise UnknownStoneColor unless [:white, :black].include?(color)
       raise NonEmptySpace unless @layout[row][col] == :empty
 
-      @previous_layout = Marshal.load(Marshal.dump(@layout))
+      sync_previous_layout
       @layout[row][col] = color
       self
     end
@@ -32,8 +32,13 @@ module Go
     def remove_stone(row, col)
       raise EmptySpace if @layout[row][col] == :empty
 
-      @previous_layout = Marshal.load(Marshal.dump(@layout))
+      sync_previous_layout
       @layout[row][col] = :empty
+      self
+    end
+
+    def sync_previous_layout
+      @previous_layout = Marshal.load(Marshal.dump(@layout))
       self
     end
   end
