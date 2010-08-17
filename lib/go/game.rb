@@ -15,14 +15,20 @@ module Go
 
     def pass
       @board.sync_previous_layout
-      @turn = @turn == :white ? :black : :white
+      next_turn
       self
     end
 
     def place_stone(row, col)
       @board.place_stone(row, col, @turn)
-      @turn = @turn == :white ? :black : :white
+      next_turn
       self
+    end
+
+    private
+
+    def next_turn
+      @turn = @turn == :white ? :black : :white
     end
   end
 end
