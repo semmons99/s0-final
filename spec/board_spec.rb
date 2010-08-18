@@ -102,7 +102,26 @@ describe "Board" do
       @board.place_stone(0, 0, :white)
       @board.layout[0][0].should == :white
     end
-  end  
+
+    it "should remove captured stones" do
+      @board.place_stone(0, 1, :black)
+      @board.place_stone(0, 0, :white)
+      @board.place_stone(1, 0, :white)
+      @board.place_stone(1, 1, :white)
+      @board.place_stone(1, 2, :white)
+      @board.place_stone(0, 2, :white)
+      @board.layout[0][1].should == :empty
+    end
+
+    it "should return the number of captured stones" do
+      @board.place_stone(0, 1, :black).should == 0
+      @board.place_stone(0, 0, :white).should == 0
+      @board.place_stone(1, 0, :white).should == 0
+      @board.place_stone(1, 1, :white).should == 0
+      @board.place_stone(1, 2, :white).should == 0
+      @board.place_stone(0, 2, :white).should == 1
+    end
+  end
 
   describe "#remove_stone" do
     it "should raise `EmptySpace` when attempting to remove a stone that doesn't exist" do

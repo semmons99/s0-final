@@ -31,9 +31,11 @@ module Go
       raise NonEmptySpace unless @layout[row][col] == :empty
       raise KoViolation if ko_violation?(row, col, color)
 
+      opposite_color = color == :white ? :black : :white
+
       sync_previous_layout
       @layout[row][col] = color
-      self
+      capture(opposite_color)
     end
 
     def remove_stone(row, col)
@@ -103,6 +105,20 @@ module Go
       _layout = Marshal.load(Marshal.dump(@layout))
       _layout[row][col] = color
       _layout
+    end
+
+    def capture(color, board = @layout)
+      captured = 0
+      groups(board).each do |group|
+        next if board[group[0][:row]][group[0][:col]] != color
+        if liberties_for(group, board) == 0
+          group.each do |stone|
+            captured += 1
+            board[stone[:row]][stone[:col]] = :empty
+          end
+        end
+      end
+      captured
     end
   end
 end
