@@ -96,9 +96,13 @@ module Go
     end
 
     def ko_violation?(row, col, color)
-      proposed_layout = Marshal.load(Marshal.dump(@layout))
-      proposed_layout[row][col] = color
-      proposed_layout == @previous_layout
+      proposed_layout(row, col, color) == @previous_layout
+    end
+
+    def proposed_layout(row, col, color)
+      _layout = Marshal.load(Marshal.dump(@layout))
+      _layout[row][col] = color
+      _layout
     end
   end
 end
