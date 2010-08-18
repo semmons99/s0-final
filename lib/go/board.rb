@@ -4,6 +4,11 @@ module Go
   class EmptySpace < StandardError; end
   class KoViolation < StandardError; end
 
+  NEIGHBORS = [
+    {:row => 0, :col => -1}, {:row => -1, :col => 0},
+    {:row => 0, :col =>  1}, {:row =>  1, :col => 0}
+  ]
+
   class Board
     attr_reader :size, :layout, :previous_layout
 
@@ -44,7 +49,33 @@ module Go
       self
     end
 
+    def groups(board = @layout)
+      groups = []
+      ct = (0...board.length).to_a
+      ct.product(ct).each do |coord|
+        row, col = coord
+        stone = {:row => row, :col => col}
+        next if board[row][col] == :empty
+        next if groups.map{|g| g.include?(stone)}.include?(true)
+        groups << group_for(board, row, col)
+      end
+      groups
+    end
+
     private
+
+    def group_for(board, row, col, group = [])
+      stone = {:row => row, :col => col}
+      return group if group.include?(stone)
+      group << stone
+      NEIGHBORS.each do |neighbor|
+        next unless row+neighbor[:row]>=0 and row+neighbor[:row]<board.length
+        next unless col+neighbor[:col]>=0 and col+neighbor[:col]<board.length
+        next unless board[row+neighbor[:row]][col+neighbor[:col]] == board[row][col]
+        group = group_for(board, row+neighbor[:row], col+neighbor[:col], group)
+      end
+      group
+    end
 
     def ko_violation?(row, col, color)
       proposed_layout = Marshal.load(Marshal.dump(@layout))

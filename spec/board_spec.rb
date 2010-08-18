@@ -129,4 +129,74 @@ describe "Board" do
       @board.previous_layout.should == @board.layout
     end
   end
+
+  describe "#groups" do
+    before :each do
+      @board.place_stone(0, 0, :white)
+      @board.place_stone(1, 0, :white)
+      @board.place_stone(1, 1, :white)
+      @board.place_stone(1, 2, :white)
+      @board.place_stone(0, 1, :black)
+      @board.place_stone(0, 2, :black)
+      @board.place_stone(0, 4, :black)
+
+      @groups = @board.groups
+    end
+
+    it "should return the correct number of group" do
+      @groups.length.should == 3
+    end
+
+    it "should correctly report stone groupings" do
+      @groups.should include(
+        [
+          {:row => 0, :col => 0},
+          {:row => 1, :col => 0},
+          {:row => 1, :col => 1},
+          {:row => 1, :col => 2}
+        ]
+      )
+
+      @groups.should include(
+        [
+          {:row => 0, :col => 1},
+          {:row => 0, :col => 2}
+        ]
+      )
+
+      @groups.should include(
+        [
+          {:row => 0, :col => 4}
+        ]
+      )
+    end
+
+    describe "with `board` given" do
+      before :each do
+        @groups = @board.groups(@board.previous_layout)
+      end
+
+      it "should return the correct number of group" do
+        @groups.length.should == 2
+      end
+
+      it "should correctly report stone groupings" do
+        @groups.should include(
+          [
+            {:row => 0, :col => 0},
+            {:row => 1, :col => 0},
+            {:row => 1, :col => 1},
+            {:row => 1, :col => 2}
+          ]
+        )
+
+        @groups.should include(
+          [
+            {:row => 0, :col => 1},
+            {:row => 0, :col => 2}
+          ]
+        )
+      end
+    end
+  end
 end
