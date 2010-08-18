@@ -199,4 +199,35 @@ describe "Board" do
       end
     end
   end
+
+  describe "#liberties_for" do
+    before :each do
+      @board.place_stone(0, 0, :white)
+      @board.place_stone(1, 0, :white)
+      @board.place_stone(1, 1, :white)
+      @board.place_stone(1, 2, :white)
+      @board.place_stone(0, 1, :black)
+      @board.place_stone(0, 2, :black)
+      @board.place_stone(0, 4, :black)
+
+      @groups = @board.groups
+    end
+
+    it "should return the correct number of liberties for a group" do
+      @board.liberties_for(@groups[0]).should == 4
+      @board.liberties_for(@groups[1]).should == 1
+      @board.liberties_for(@groups[2]).should == 3
+    end
+
+    describe "with `board` given" do
+      before :each do
+        @groups = @board.groups(@board.previous_layout)
+      end
+
+      it "should return the correct number of liberties for a group" do
+        @board.liberties_for(@groups[0], @board.previous_layout).should == 4
+        @board.liberties_for(@groups[1], @board.previous_layout).should == 1
+      end
+    end
+  end
 end

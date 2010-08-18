@@ -62,6 +62,24 @@ module Go
       groups
     end
 
+    def liberties_for(group, board = @layout)
+      neighbors = []
+      group.each do |stone|
+        NEIGHBORS.each do |neighbor|
+          next unless stone[:row]+neighbor[:row]>=0
+          next unless stone[:col]+neighbor[:col]>=0
+          next unless stone[:row]+neighbor[:row]<board.length
+          next unless stone[:col]+neighbor[:col]<board.length
+          neighbors << { :row => stone[:row]+neighbor[:row],
+                         :col => stone[:col]+neighbor[:col] }
+        end
+      end
+      neighbors.uniq!
+      neighbors.select{|neighbor|
+        board[neighbor[:row]][neighbor[:col]] == :empty
+      }.length
+    end
+
     private
 
     def group_for(board, row, col, group = [])
