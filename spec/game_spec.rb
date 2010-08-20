@@ -61,6 +61,18 @@ describe "Game" do
       @game.place_stone(0, 1)
       @game.turn.should == :white
     end
+
+    it "should return the number of stones captured" do
+      @game.place_stone(0, 0).should == 0
+      @game.place_stone(0, 1).should == 0
+      @game.place_stone(1, 0).should == 0
+      @game.pass
+      @game.place_stone(1, 1).should == 0
+      @game.pass
+      @game.place_stone(1, 2).should == 0
+      @game.pass
+      @game.place_stone(0, 2).should == 1
+    end
   end
 
   describe "#pretty_board" do

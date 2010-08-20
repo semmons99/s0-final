@@ -45,11 +45,11 @@ module Go
     # @param [Integer] row The row to place the stone in.
     # @param [Integer] col The column to place the stone in.
     #
-    # @return [Go::Game] +self+
+    # @return [Integer] The number of stones captured
     def place_stone(row, col)
-      @board.place_stone(row, col, @turn)
+      captured = @board.place_stone(row, col, @turn)
       next_turn
-      self
+      captured
     end
     
     ##
