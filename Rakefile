@@ -12,6 +12,9 @@ end
 
 task :default => :test
 
+require 'cucumber/rake/task'
+Cucumber::Rake::Task.new
+
 begin
   require 'yard'
   YARD::Rake::YardocTask.new
