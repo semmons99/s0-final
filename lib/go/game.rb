@@ -16,6 +16,10 @@ module Go
     #   9x9, 13x13 and 19x19.
     #
     # @return [Go::Game] +self+
+    #
+    # @example
+    #   require 'go/game'
+    #   game = Go::Game.new #=> <Go::Game...>
     def initialize(board_size=19)
       @turn  = :white
       @board = Board.new(board_size)
@@ -25,6 +29,11 @@ module Go
     # Returns the current state of the board.
     #
     # @return [Array[Array]] Current state of the board.
+    #
+    # @example
+    #   require 'go/game'
+    #   game = Go::Game.new #=> <Go::Game...>
+    #   game.board          #=> [[:empty, :empty, :empty, ...]...]
     def board
       @board.layout
     end
@@ -33,6 +42,11 @@ module Go
     # Passes the current players turn.
     #
     # @return [Go::Game] +self+
+    #
+    # @example
+    #   require 'go/game'
+    #   game = Go::Game.new #=> <Go::Game...>
+    #   game.pass           #=> <Go::Game...>
     def pass
       @board.sync_previous_layout
       next_turn
@@ -46,6 +60,11 @@ module Go
     # @param [Integer] col The column to place the stone in.
     #
     # @return [Integer] The number of stones captured
+    #
+    # @example
+    #   require 'go/game'
+    #   game = Go::Game.new    #=> <Go::Game...>
+    #   game.place_stone(0, 0) #=> 0
     def place_stone(row, col)
       captured = @board.place_stone(row, col, @turn)
       next_turn
@@ -57,6 +76,11 @@ module Go
     # console.
     #
     # @return [String] Pretty version of the board for use in console output.
+    #
+    # @example
+    #   require 'go/game'
+    #   game = Go::Game.new #=> <Go::Game...>
+    #   game.pretty_board   #=> ". . . . . . . . . . . . . . . . . . . \n..."
     def pretty_board
       @board.layout.map{|row|
         row.map{|cell|

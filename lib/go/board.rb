@@ -49,6 +49,10 @@ module Go
     #   13x13 and 19x19.
     #
     # @return [Go::Board] +self+
+    #
+    # @example
+    #   require 'go/board'
+    #   board = Go::Board.new #=> <Go::Board...>
     def initialize(size = 19)
       @size            = size
       @layout          = Array.new(@size){Array.new(@size)}
@@ -60,6 +64,11 @@ module Go
     # Removes all the stones from +layout+ and +previous_layout+.
     #
     # @return [Go::Board] +self+
+    #
+    # @example
+    #   require 'go/board'
+    #   board = Go::Board.new #=> <Go::Board...>
+    #   board.reset           #=> <Go::Board...>
     def reset
       [@layout, @previous_layout].each do |board|
         (0...@size).each{|row| (0...@size).each{|col| board[row][col] = :empty}}
@@ -86,6 +95,11 @@ module Go
     #
     # @return [Integer] The number of opponents stones captured after placing
     #   this stone.
+    #
+    # @example
+    #   require 'go/board'
+    #   game = Go::Board.new           #=> <Go::Board...>
+    #   game.place_stone(0, 0, :white) #=> 0
     def place_stone(row, col, color)
       raise UnknownStoneColor unless [:white, :black].include?(color)
       raise NonEmptySpace unless @layout[row][col] == :empty
@@ -112,6 +126,12 @@ module Go
     # @param [Integer] col The column to remove the stone from.
     #
     # @return [Go::Board] +self+
+    #
+    # @example
+    #   require 'go/board'
+    #   board = Go::Board.new           #=> <Go::Board...>
+    #   board.place_stone(0, 0, :white) #=> 0
+    #   board.remove_stone(0, 0)        #=> <Go::Board...>
     def remove_stone(row, col)
       raise EmptySpace if @layout[row][col] == :empty
 
@@ -124,6 +144,11 @@ module Go
     # Syncs +previous_layout+ with +layout+. Used to help detect Ko violations.
     #
     # @return [Go::Board] +self+
+    #
+    # @example
+    #   require 'go/board'
+    #   board = Go::Board.new      #=> <Go::Board...>
+    #   board.sync_previous_layout #=> <Go::Board...>
     def sync_previous_layout
       @previous_layout = Marshal.load(Marshal.dump(@layout))
       self
@@ -135,6 +160,12 @@ module Go
     # @param [Array[Array]] board The Go board to find the groups on.
     #
     # @return [Array[Array]] The discovered groups.
+    #
+    # @example
+    #   require 'go/board'
+    #   board = Go::Board.new           #=> <Go::Board...>
+    #   board.place_stone(0, 0, :white) #=> 0
+    #   board.groups                    #=> [[{:row => 0, :col => 0}]]
     def groups(board = @layout)
       groups = []
       ct = (0...board.length).to_a
@@ -156,6 +187,13 @@ module Go
     # @param [Array[Array]] board The board to use to check liberties.
     #
     # @return [Integer] The number of liberties available to the group.
+    #
+    # @example
+    #   require 'go/board'
+    #   board = Go::Board.new             #=> <Go::Board...>
+    #   board.place_stone(0, 0, :white)   #=> 0
+    #   groups = board.groups             #=> [[{:row => 0, :col => 0}]]
+    #   board.liberties_for(groups.first) #=> 2
     def liberties_for(group, board = @layout)
       neighbors = []
       group.each do |stone|
