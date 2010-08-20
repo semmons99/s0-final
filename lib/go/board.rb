@@ -93,8 +93,7 @@ module Go
 
       opposite_color = color == :white ? :black : :white
 
-      proposed_board = Marshal.load(Marshal.dump(@layout))
-      proposed_board[row][col] = color
+      proposed_board = proposed_layout(row, col, color)
       captured = capture(opposite_color, proposed_board)
       raise SuicideAttempted if capture(color, proposed_board) > 0
 
