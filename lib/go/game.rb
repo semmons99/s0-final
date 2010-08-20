@@ -15,11 +15,11 @@ module Go
     # @param [Integer] board_size The size of the Go board. Standard sizes are
     #   9x9, 13x13 and 19x19.
     #
-    # @return [Go::Game] +self+
+    # @return [Go::game] The new +Go::Game+.
     #
     # @example
     #   require 'go/game'
-    #   game = Go::Game.new #=> <Go::Game...>
+    #   game = Go::Game.new #=> <game#Go::Game...>
     def initialize(board_size=19)
       @turn  = :white
       @board = Board.new(board_size)
@@ -32,7 +32,7 @@ module Go
     #
     # @example
     #   require 'go/game'
-    #   game = Go::Game.new #=> <Go::Game...>
+    #   game = Go::Game.new #=> <game#Go::Game...>
     #   game.board          #=> [[:empty, :empty, :empty, ...]...]
     def board
       @board.layout
@@ -45,8 +45,8 @@ module Go
     #
     # @example
     #   require 'go/game'
-    #   game = Go::Game.new #=> <Go::Game...>
-    #   game.pass           #=> <Go::Game...>
+    #   game = Go::Game.new #=> <game#Go::Game...>
+    #   game.pass           #=> <game#Go::Game...>
     def pass
       @board.sync_previous_layout
       next_turn
@@ -63,7 +63,7 @@ module Go
     #
     # @example
     #   require 'go/game'
-    #   game = Go::Game.new    #=> <Go::Game...>
+    #   game = Go::Game.new    #=> <game#Go::Game...>
     #   game.place_stone(0, 0) #=> 0
     def place_stone(row, col)
       captured = @board.place_stone(row, col, @turn)
@@ -79,7 +79,7 @@ module Go
     #
     # @example
     #   require 'go/game'
-    #   game = Go::Game.new #=> <Go::Game...>
+    #   game = Go::Game.new #=> <game#Go::Game...>
     #   game.pretty_board   #=> ". . . . . . . . . . . . . . . . . . . \n..."
     def pretty_board
       @board.layout.map{|row|

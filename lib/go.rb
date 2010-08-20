@@ -10,7 +10,7 @@ module Go
   # @return [Go::Game] The new +Go::Game+.
   #
   # @example
-  #   game = Go.new_game(13) #=> <Go::Game...>
+  #   game = Go.new_game(13) #=> <game#Go::Game...>
   def self.new_game(board_size=19)
     Go::Game.new(board_size)
   end

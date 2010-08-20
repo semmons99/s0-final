@@ -48,11 +48,11 @@ module Go
     # @param [Integer] size The size of the Go board. Standard sizes are 9x9,
     #   13x13 and 19x19.
     #
-    # @return [Go::Board] +self+
+    # @return [Go::Board] The new +Go::Board+.
     #
     # @example
     #   require 'go/board'
-    #   board = Go::Board.new #=> <Go::Board...>
+    #   board = Go::Board.new #=> <board#Go::Board...>
     def initialize(size = 19)
       @size            = size
       @layout          = Array.new(@size){Array.new(@size)}
@@ -67,8 +67,8 @@ module Go
     #
     # @example
     #   require 'go/board'
-    #   board = Go::Board.new #=> <Go::Board...>
-    #   board.reset           #=> <Go::Board...>
+    #   board = Go::Board.new #=> <board#Go::Board...>
+    #   board.reset           #=> <board#Go::Board...>
     def reset
       [@layout, @previous_layout].each do |board|
         (0...@size).each{|row| (0...@size).each{|col| board[row][col] = :empty}}
@@ -98,8 +98,8 @@ module Go
     #
     # @example
     #   require 'go/board'
-    #   game = Go::Board.new           #=> <Go::Board...>
-    #   game.place_stone(0, 0, :white) #=> 0
+    #   board = Go::Board.new           #=> <board#Go::Board...>
+    #   board.place_stone(0, 0, :white) #=> 0
     def place_stone(row, col, color)
       raise UnknownStoneColor unless [:white, :black].include?(color)
       raise NonEmptySpace unless @layout[row][col] == :empty
@@ -125,13 +125,13 @@ module Go
     # @param [Integer] row The row to remove the stone from.
     # @param [Integer] col The column to remove the stone from.
     #
-    # @return [Go::Board] +self+
+    # @return [Go::board] +self+
     #
     # @example
     #   require 'go/board'
-    #   board = Go::Board.new           #=> <Go::Board...>
+    #   board = Go::Board.new           #=> <board#Go::Board...>
     #   board.place_stone(0, 0, :white) #=> 0
-    #   board.remove_stone(0, 0)        #=> <Go::Board...>
+    #   board.remove_stone(0, 0)        #=> <board#Go::Board...>
     def remove_stone(row, col)
       raise EmptySpace if @layout[row][col] == :empty
 
@@ -147,8 +147,8 @@ module Go
     #
     # @example
     #   require 'go/board'
-    #   board = Go::Board.new      #=> <Go::Board...>
-    #   board.sync_previous_layout #=> <Go::Board...>
+    #   board = Go::Board.new      #=> <board#Go::Board...>
+    #   board.sync_previous_layout #=> <board#Go::Board...>
     def sync_previous_layout
       @previous_layout = Marshal.load(Marshal.dump(@layout))
       self
@@ -163,7 +163,7 @@ module Go
     #
     # @example
     #   require 'go/board'
-    #   board = Go::Board.new           #=> <Go::Board...>
+    #   board = Go::Board.new           #=> <board#Go::Board...>
     #   board.place_stone(0, 0, :white) #=> 0
     #   board.groups                    #=> [[{:row => 0, :col => 0}]]
     def groups(board = @layout)
@@ -190,7 +190,7 @@ module Go
     #
     # @example
     #   require 'go/board'
-    #   board = Go::Board.new             #=> <Go::Board...>
+    #   board = Go::Board.new             #=> <board#Go::Board...>
     #   board.place_stone(0, 0, :white)   #=> 0
     #   groups = board.groups             #=> [[{:row => 0, :col => 0}]]
     #   board.liberties_for(groups.first) #=> 2
