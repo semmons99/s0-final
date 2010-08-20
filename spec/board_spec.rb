@@ -90,6 +90,15 @@ describe "Board" do
       lambda{@board.place_stone(0, 0, :white)}.should raise_error Go::KoViolation
     end
 
+    it "should raise `SuicideAttempted` when suicide is attempted" do
+      @board.place_stone(0, 0, :white)
+      @board.place_stone(1, 0, :white)
+      @board.place_stone(1, 1, :white)
+      @board.place_stone(1, 2, :white)
+      @board.place_stone(0, 2, :white)
+      lambda{@board.place_stone(0, 1, :black)}.should raise_error Go::SuicideAttempted
+    end
+
     it "should copy the current layout into the previous layout" do
       @board.place_stone(0, 0, :white)
       @board.previous_layout[0][0].should == :empty

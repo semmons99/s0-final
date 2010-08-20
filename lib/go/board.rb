@@ -3,6 +3,7 @@ module Go
   class NonEmptySpace < StandardError; end
   class EmptySpace < StandardError; end
   class KoViolation < StandardError; end
+  class SuicideAttempted < StandardError; end
 
   NEIGHBORS = [
     {:row => 0, :col => -1}, {:row => -1, :col => 0},
@@ -33,9 +34,14 @@ module Go
 
       opposite_color = color == :white ? :black : :white
 
+      proposed_board = Marshal.load(Marshal.dump(@layout))
+      proposed_board[row][col] = color
+      captured = capture(opposite_color, proposed_board)
+      raise SuicideAttempted if capture(color, proposed_board) > 0
+
       sync_previous_layout
-      @layout[row][col] = color
-      capture(opposite_color)
+      @layout = Marshal.load(Marshal.dump(proposed_board))
+      captured
     end
 
     def remove_stone(row, col)
